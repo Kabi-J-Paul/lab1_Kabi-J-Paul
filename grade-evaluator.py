@@ -45,8 +45,54 @@ def evaluate_grades(data):
     # TODO: e) Check for failed formative assignments (< 50%)
     #          and determine which one(s) have the highest weight for resubmission.
     # TODO: f) Print the final decision (PASSED / FAILED) and resubmission options
-    
-    pass
+
+
+    if len(data) == 0:
+        print("No grade records found. The CSV file is empty.")
+        return
+
+    for record in data:
+        if record['score'] < 0 or record['score'] > 100:
+            print(f"Error: '{record['assignment']}' has an invalid score: {record['score']}")
+            sys.exit(1)
+    total_weight = 0
+    formative_weight = 0
+    summative_weight = 0
+
+    for record in data:
+        total_weight = total_weight + record['weight']
+        if record['group'] == 'Formative':
+            formative_weight = formative_weight + record['weight']
+        elif record['group'] == 'Summative':
+            summative_weight = summative_weight + record['weight']
+
+    if total_weight != 100:
+        print(f"Error: Total weights must equal 100, but got {total_weight}")
+        sys.exit(1)
+    if formative_weight != 60:
+        print(f"Error: Formative weights must equal 60, but got {formative_weight}")
+        sys.exit(1)
+    if summative_weight != 40:
+        print(f"Error: Summative weights must equal 40, but got {summative_weight}")
+        sys.exit(1)
+
+    formative_points = 0
+    summative_points = 0
+
+    for record in data:
+        points = record['score'] * record['weight'] / 100
+        if record['group'] == 'Formative':
+            formative_points = formative_points + points
+        else:
+            summative_points = summative_points + points
+
+    total_grade = formative_points + summative_points
+    gpa = (total_grade / 100) * 5.0
+
+    print(f"Formative: {formative_points}/{formative_weight} ({formative_points / formative_weight * 100:.2f}%)")
+    print(f"Summative: {summative_points}/{summative_weight} ({summative_points / summative_weight * 100:.2f}%)")
+    print(f"Total Grade: {total_grade:.2f}/100")
+    print(f"GPA: {gpa:.2f} / 5.0")
 
 if __name__ == "__main__":
     # 1. Load the data
