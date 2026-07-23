@@ -94,6 +94,32 @@ def evaluate_grades(data):
     print(f"Total Grade: {total_grade:.2f}/100")
     print(f"GPA: {gpa:.2f} / 5.0")
 
+    formative_percent = formative_points / formative_weight * 100
+    summative_percent = summative_points / summative_weight * 100
+
+    if formative_percent >= 50 and summative_percent >= 50:
+        print("Final Status: PASSED")
+    else:
+        print("Final Status: FAILED")
+
+    failed_formatives = []
+    for record in data:
+        if record['group'] == 'Formative' and record['score'] < 50:
+            failed_formatives.append(record)
+
+    if len(failed_formatives) == 0:
+        print("No formative assignments eligible for resubmission.")
+    else:
+        highest_weight = failed_formatives[0]['weight']
+        for record in failed_formatives:
+            if record['weight'] > highest_weight:
+                highest_weight = record['weight']
+
+        print("Eligible for resubmission (highest-weight failed formative):")
+        for record in failed_formatives:
+            if record['weight'] == highest_weight:
+                print(f"  - {record['assignment']} (score: {record['score']}, weight: {record['weight']})")
+
 if __name__ == "__main__":
     # 1. Load the data
     course_data = load_csv_data()
