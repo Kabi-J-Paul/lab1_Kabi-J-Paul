@@ -101,6 +101,7 @@ This matches the transcript exactly, formatives 44.4, summatives 32.5, GPA 3.845
 | 5 | Score above 100 | `Error: 'Quiz' has an invalid score: 150.0` |
 | 6 | Weights not summing to 100 | `Error: Total weights must equal 100, but got 105.0` |
 | 7 | Weights summing to 100 with an incorrect 60/40 split | `Error: Formative weights must equal 60, but got 65.0` |
+| 8 | CSV containing blank rows between records | Blank rows skipped; output identical to a clean file |
 
 ### Sample runs of edge cases
 
