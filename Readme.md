@@ -9,7 +9,7 @@ Calculates a student's final academic standing from a CSV of course grades, and 
 
 ## Input File Format
 
-The evaluator reads a CSV with these exact columns: 
+This evaluator reads a CSV with these exact columns: 
 You can create your own csv file with the values below
 and use it to run the program if you do not have one 
 already
@@ -33,7 +33,7 @@ Place your `grades.csv` in the same folder as the script, then run:
 python grade-evaluator.py
 ```
 
-Enter the CSV filename when prompted (e.g. `grades.csv` for correct run).
+Enter the CSV filename when prompted (for example `grades.csv` for correct run).
 
 The program validates all scores (0–100) and weights (Total = 100, Formative = 60, Summative = 40),and then prints the category percentages, total grade, GPA out of 5.0, the final PASSED/FAILED status, and which failed formative assignments are eligible for resubmission.
 
@@ -47,7 +47,7 @@ Make the script executable once:
 chmod +x organizer.sh
 ```
 
-Then run it:
+Then you can run it:
 
 ```
 ./organizer.sh
@@ -56,7 +56,7 @@ Then run it:
 (or `bash organizer.sh` without making it executable if you like to do it like that)
 
 Each run:
-1. Creates an `archive/` directory if it doesn't exist
+1. Creates an `archive/` directory if it doesn't exist already
 2. Moves `grades.csv` into `archive/` renamed with a timestamp (e.g. `grades_20260723-213641.csv`)
 3. It then creates a fresh empty `grades.csv`
 4. Appends the operation details to `organizer.log`
@@ -89,3 +89,85 @@ Eligible for resubmission (highest-weight failed formative):
 J Paul@EileenBlessing MINGW64 ~/documents/lab1_Kabi-J-Paul (main)
 $ 
 This matches the transcript exactly, formatives 44.4, summatives 32.5, GPA 3.845, status PASSED, and the discussion forum as the resubmission. Discussion forum is selected over the heavier Group Coding Lab becuase only failed formatives i.e. below 50$ are considered, and general quiz is at 51% and is a pass
+
+### Edge cases tested
+
+| # | Input | Result |
+|---|---|---|
+| 1 | Filename that does not exist | `Error: The file 'nofile.csv' was not found.` |
+| 2 | Completely empty CSV | `No grade records found. The CSV file is empty.` |
+| 3 | CSV with header row but no data | `No grade records found. The CSV file is empty.` |
+| 4 | Non-numeric score value (`abc`) | `An error occurred while reading the file: could not convert string to float: 'abc'` |
+| 5 | Score above 100 | `Error: 'Quiz' has an invalid score: 150.0` |
+| 6 | Weights not summing to 100 | `Error: Total weights must equal 100, but got 105.0` |
+| 7 | Weights summing to 100 with an incorrect 60/40 split | `Error: Formative weights must equal 60, but got 65.0` |
+
+### Sample runs of edge cases
+
+**1. Filename that does not exist**
+
+```
+$ python grade-evaluator.py
+Enter the name of the CSV file to process (e.g., grades.csv): nofile.csv
+Error: The file 'nofile.csv' was not found.
+```
+
+**2. Completely empty CSV** (as left behind by `organizer.sh`)
+
+```
+$ python grade-evaluator.py
+Enter the name of the CSV file to process (e.g., grades.csv): grades.csv
+
+--- Processing Grades ----
+No grade records found. The CSV file is empty.
+```
+
+**3. CSV with a header row but no data**
+
+```
+$ python grade-evaluator.py
+Enter the name of the CSV file to process (e.g., grades.csv): test-header.csv
+
+--- Processing Grades ----
+No grade records found. The CSV file is empty.
+```
+
+**4. Non-numeric score value**
+
+```
+$ python grade-evaluator.py
+Enter the name of the CSV file to process (e.g., grades.csv): grades.csv
+An error occurred while reading the file: could not convert string to float: 'abc'
+```
+
+**5. Score above 100**
+
+```
+$ python grade-evaluator.py
+Enter the name of the CSV file to process (e.g., grades.csv): test-badscore.csv
+
+--- Processing Grades ----
+Error: 'Quiz' has an invalid score: 150.0
+```
+
+**6. Weights not summing to 100**
+
+```
+$ python grade-evaluator.py
+Enter the name of the CSV file to process (e.g., grades.csv): test-badscore.csv
+
+--- Processing Grades ----
+Error: Total weights must equal 100, but got 105.0
+```
+
+**7. Weights summing to 100 with an incorrect 60/40 split**
+
+```
+$ python grade-evaluator.py
+Enter the name of the CSV file to process (e.g., grades.csv): test-badscore.csv
+
+--- Processing Grades ----
+Error: Formative weights must equal 60, but got 65.0
+```
+
+Tests 5 to 7 reuse the same test file, edited between runs to produce each condition.
