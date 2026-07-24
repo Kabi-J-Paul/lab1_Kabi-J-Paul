@@ -33,9 +33,9 @@ def load_csv_data():
 
 def evaluate_grades(data):
     """
-     Validates the grade data, calculates the final grade and GPA,
+    Validates the grade data, calculates the final grade and GPA,
     and reports pass/fail status with resubmission eligibility.
-    'data' is a list of dictionaries containing all various the assignment records.
+    'data' is a list of dictionaries containing the assignment records .
     """
     print("\n--- Processing Grades ----")
     
@@ -50,7 +50,7 @@ def evaluate_grades(data):
             sys.exit(1)
 
 
-    # Validate weights, total 100, Formative 60, Summative 40           
+    # Validate weights, total 100, Formative 60, Summative 40
     total_weight = 0
     formative_weight = 0
     summative_weight = 0
@@ -95,7 +95,7 @@ def evaluate_grades(data):
     print(f"GPA: {gpa:.3f} / 5.0")
 
 
-    # A student can only with >= 50% in BOTH categories
+    # # A student passes only with >= 50% in BOTH categories
     formative_percent = formative_points / formative_weight * 100
     summative_percent = summative_points / summative_weight * 100
 
