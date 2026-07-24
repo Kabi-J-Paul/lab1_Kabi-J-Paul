@@ -171,4 +171,22 @@ Enter the name of the CSV file to process (e.g., grades.csv): test-badscore.csv
 Error: Formative weights must equal 60, but got 65.0
 ```
 
+**8. CSV containing blank rows between records**
+
+```
+$ python grade-evaluator.py
+Enter the name of the CSV file to process (e.g., grades.csv): test-blankrows.csv
+
+--- Processing Grades ----
+Formative: 34.0/60.0 (56.67%)
+Summative: 26.0/40.0 (65.00%)
+Total Grade: 60.00/100
+GPA: 3.000 / 5.0
+Final Status: PASSED
+Eligible for resubmission (highest-weight failed formative):
+  - Group Exercise (score: 40.0, weight: 20.0)
+  - Functions and Debugging Lab (score: 45.0, weight: 20.0)
+```
+Blank rows are skipped and the output matches a run on the equivalent file without them.
+
 Tests 5 to 7 reuse the same test file, edited between runs to produce each condition.
