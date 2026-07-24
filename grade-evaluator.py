@@ -33,37 +33,34 @@ def load_csv_data():
 
 def evaluate_grades(data):
     """
-    Implement your logic here.
-    'data' is a list of dictionaries containing the assignment records.
+     Validates the grade data, calculates the final grade and GPA,
+    and reports pass/fail status with resubmission eligibility.
+    'data' is a list of dictionaries containing all various the assignment records.
     """
-    print("\n--- Processing Grades ---")
+    print("\n--- Processing Grades ----")
     
-    # TODO: a) Check if all scores are percentage based (0-100)
-    # TODO: b) Validate total weights (Total=100, Summative=40, Formative=60)
-    # TODO: c) Calculate the Final Grade and GPA
-    # TODO: d) Determine Pass/Fail status (>= 50% in BOTH categories)
-    # TODO: e) Check for failed formative assignments (< 50%)
-    #          and determine which one(s) have the highest weight for resubmission.
-    # TODO: f) Print the final decision (PASSED / FAILED) and resubmission options
-
-
+    # Handle an empty CSV (e.g. one freshly created by organizer.sh) properly
     if len(data) == 0:
         print("No grade records found. The CSV file is empty.")
         return
-
+    # Validate that every score is within 0-100
     for record in data:
         if record['score'] < 0 or record['score'] > 100:
             print(f"Error: '{record['assignment']}' has an invalid score: {record['score']}")
             sys.exit(1)
+
+
+    # Validate weights, total 100, Formative 60, Summative 40           
     total_weight = 0
     formative_weight = 0
     summative_weight = 0
 
     for record in data:
+        group = record['group'].strip().lower()
         total_weight = total_weight + record['weight']
-        if record['group'] == 'Formative':
+        if group in ('formative', 'fa'):
             formative_weight = formative_weight + record['weight']
-        elif record['group'] == 'Summative':
+        elif group in ('summative', 'sa'):
             summative_weight = summative_weight + record['weight']
 
     if total_weight != 100:
@@ -76,12 +73,15 @@ def evaluate_grades(data):
         print(f"Error: Summative weights must equal 40, but got {summative_weight}")
         sys.exit(1)
 
+
+    # Calculate weighted points per category, total grade, and GPA
     formative_points = 0
     summative_points = 0
 
     for record in data:
+        group = record['group'].strip().lower()
         points = record['score'] * record['weight'] / 100
-        if record['group'] == 'Formative':
+        if group in ('formative', 'fa'):
             formative_points = formative_points + points
         else:
             summative_points = summative_points + points
@@ -92,8 +92,10 @@ def evaluate_grades(data):
     print(f"Formative: {formative_points}/{formative_weight} ({formative_points / formative_weight * 100:.2f}%)")
     print(f"Summative: {summative_points}/{summative_weight} ({summative_points / summative_weight * 100:.2f}%)")
     print(f"Total Grade: {total_grade:.2f}/100")
-    print(f"GPA: {gpa:.2f} / 5.0")
+    print(f"GPA: {gpa:.3f} / 5.0")
 
+
+    # A student can only with >= 50% in BOTH categories
     formative_percent = formative_points / formative_weight * 100
     summative_percent = summative_points / summative_weight * 100
 
@@ -102,9 +104,10 @@ def evaluate_grades(data):
     else:
         print("Final Status: FAILED")
 
+    # Resubmission: highest-weight failed formative(s), including ties
     failed_formatives = []
     for record in data:
-        if record['group'] == 'Formative' and record['score'] < 50:
+        if record['group'].strip().lower() in ('formative', 'fa') and record['score'] < 50:
             failed_formatives.append(record)
 
     if len(failed_formatives) == 0:
