@@ -73,9 +73,11 @@ If `grades.csv` is not present, the script reports this and exits without writin
 
 ## Testing
 
-Verified against the transcript structure provided with the assignment:
+Verified against the transcript structure provided with the assignment, using a CSV containing the transcript's five assignments:
 
-PROGRAM OUTPUT
+```
+$ python grade-evaluator.py
+Enter the name of the CSV file to process (e.g., grades.csv): transcript-test.csv
 
 --- Processing Grades ----
 Formative: 44.4/60.0 (74.00%)
@@ -85,10 +87,9 @@ GPA: 3.845 / 5.0
 Final Status: PASSED
 Eligible for resubmission (highest-weight failed formative):
   - Discussion Forum (score: 45.0, weight: 15.0)
+```
 
-J Paul@EileenBlessing MINGW64 ~/documents/lab1_Kabi-J-Paul (main)
-$ 
-This matches the transcript exactly, formatives 44.4, summatives 32.5, GPA 3.845, status PASSED, and the discussion forum as the resubmission. Discussion forum is selected over the heavier Group Coding Lab becuase only failed formatives i.e. below 50$ are considered, and general quiz is at 51% and is a pass
+This matches the transcript exactly: Formatives 44.4, Summatives 32.5, GPA 3.845, status PASSED, and Discussion Forum as the resubmission. Discussion Forum is selected over the heavier Group Coding Lab because only *failed* formatives (below 50%) are considered, and General Quiz at 51% is a pass.
 
 ### Edge cases tested
 
