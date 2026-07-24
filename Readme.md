@@ -27,6 +27,12 @@ The group value should be `Formative` or `Summative`. The abbreviations FA and S
 
 ## Running the Grade Evaluator
 
+Note: Run both scripts from inside the project folder:
+
+```bash
+cd lab1_Kabi-J-Paul
+```
+
 Place your `grades.csv` in the same folder as the script, then run:
 
 ```bash
@@ -35,7 +41,7 @@ python grade-evaluator.py
 
 Enter the CSV filename when prompted (for example `grades.csv` for correct run).
 
-The program validates all scores (0–100) and weights (Total = 100, Formative = 60, Summative = 40),and then prints the category percentages, total grade, GPA out of 5.0, the final PASSED/FAILED status, and which failed formative assignments are eligible for resubmission.
+The program validates all scores (0–100) and weights (Total = 100, Formative = 60, Summative = 40), and then prints the category percentages, total grade, GPA out of 5.0, the final PASSED/FAILED status, and which failed formative assignments are eligible for resubmission.
 
 A student passes only when they score at least 50% in both the Formative and Summative categories. Resubmission eligibility lists every failed formative assignment tied at the highest weight. Eligible resubmissions are shown regardless of overall pass/fail status, since a passing student can still resubmit a failed formative.
 
